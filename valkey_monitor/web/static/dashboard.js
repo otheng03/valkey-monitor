@@ -12,54 +12,94 @@ const Dashboard = (() => {
     cyan:   "rgb( 57, 211, 197)",
   };
 
+  const FONT = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+
+  // Global Chart.js defaults for unified look
+  Chart.defaults.font.family = FONT;
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = "#8b949e";
+
   const COMMON = {
     responsive: true,
     animation: false,
     interaction: { intersect: false, mode: "index" },
+    layout: {
+      padding: { top: 4, right: 4, bottom: 4, left: 4 },
+    },
     scales: {
       x: {
         type: "time",
         time: { tooltipFormat: "HH:mm:ss", displayFormats: { second: "HH:mm:ss" } },
-        ticks: { color: "#8b949e", maxTicksLimit: 10 },
+        ticks: { color: "#8b949e", font: { family: FONT, size: 11 }, maxTicksLimit: 10 },
         grid: { color: "#21262d" },
+        border: { color: "#30363d" },
       },
       y: {
-        ticks: { color: "#8b949e" },
+        ticks: { color: "#8b949e", font: { family: FONT, size: 11 } },
         grid: { color: "#21262d" },
+        border: { color: "#30363d" },
       },
     },
     plugins: {
-      legend: { labels: { color: "#c9d1d9", boxWidth: 12 } },
+      title: { display: false },
+      legend: {
+        labels: {
+          color: "#c9d1d9",
+          font: { family: FONT, size: 12, weight: "500" },
+          boxWidth: 10,
+          boxHeight: 10,
+          useBorderRadius: true,
+          borderRadius: 2,
+          padding: 12,
+        },
+      },
+      tooltip: {
+        backgroundColor: "#1c2128",
+        titleColor: "#c9d1d9",
+        bodyColor: "#c9d1d9",
+        borderColor: "#30363d",
+        borderWidth: 1,
+        titleFont: { family: FONT, size: 12, weight: "600" },
+        bodyFont: { family: FONT, size: 12 },
+        padding: 10,
+        cornerRadius: 6,
+        displayColors: true,
+        boxWidth: 8,
+        boxHeight: 8,
+        boxPadding: 4,
+      },
     },
   };
 
-  function makeChart(id, title, datasets) {
+  function makeChart(id, datasets) {
     const ctx = document.getElementById(id).getContext("2d");
     return new Chart(ctx, {
       type: "line",
       data: { datasets },
-      options: {
-        ...COMMON,
-        plugins: {
-          ...COMMON.plugins,
-          title: { display: true, text: title, color: "#c9d1d9" },
-        },
-      },
+      options: COMMON,
     });
   }
 
   function ds(label, color) {
-    return { label, data: [], borderColor: color, backgroundColor: color, borderWidth: 1.5, pointRadius: 0, tension: 0.2 };
+    return {
+      label,
+      data: [],
+      borderColor: color,
+      backgroundColor: color,
+      borderWidth: 1.5,
+      pointRadius: 0,
+      tension: 0.2,
+    };
   }
 
   let charts = {};
 
   function createCharts() {
-    charts.ops  = makeChart("chart-ops",  "OPS / sec",       [ds("OPS/s",    CHART_COLORS.blue)]);
-    charts.cpu  = makeChart("chart-cpu",  "CPU (per sec)",   [ds("CPU user",  CHART_COLORS.green), ds("CPU sys", CHART_COLORS.orange)]);
-    charts.mem  = makeChart("chart-mem",  "Valkey Memory (MiB)", [ds("Used", CHART_COLORS.blue), ds("RSS", CHART_COLORS.purple), ds("Peak", CHART_COLORS.red)]);
-    charts.frag = makeChart("chart-frag", "Fragmentation Ratio", [ds("Frag", CHART_COLORS.orange)]);
-    charts.sys  = makeChart("chart-sys",  "System Memory (MiB)", [ds("Cache", CHART_COLORS.cyan), ds("Buffers", CHART_COLORS.green), ds("Kernel", CHART_COLORS.red)]);
+    charts.ops  = makeChart("chart-ops",  [ds("OPS/s", CHART_COLORS.blue)]);
+    charts.cpu  = makeChart("chart-cpu",  [ds("CPU user", CHART_COLORS.green), ds("CPU sys", CHART_COLORS.orange)]);
+    charts.mem  = makeChart("chart-mem",  [ds("Used", CHART_COLORS.blue), ds("RSS", CHART_COLORS.purple), ds("Peak", CHART_COLORS.red)]);
+    charts.frag = makeChart("chart-frag", [ds("Frag", CHART_COLORS.orange)]);
+    charts.sys  = makeChart("chart-sys",  [ds("Cache", CHART_COLORS.cyan), ds("Buffers", CHART_COLORS.green), ds("Kernel", CHART_COLORS.red)]);
   }
 
   function pushPoint(snap) {
