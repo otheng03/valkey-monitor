@@ -42,8 +42,8 @@ python valkey-monitor.py [OPTIONS]
 |---|---|---|
 | `--host` | `127.0.0.1` | Server hostname or IP |
 | `--port` | `6379` | Server port |
-| `--username` | | Username for ACL auth |
-| `--password` | | Password |
+| `--username` | None | Username for ACL auth |
+| `--password` | None | Password |
 | `--interval` | `1.0` | Seconds between samples |
 | `--header-every` | `20` | Re-print the header every N rows |
 
