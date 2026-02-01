@@ -86,6 +86,7 @@ def main():
 
     header = (
         f"{'TIME':19} "
+        f"{'OPS/s':>7} "
         f"{'CPU_U/s':>8} {'CPU_S/s':>8} "
         f"{'USED(MiB)':>9} {'RSS(MiB)':>9} {'PEAK(MiB)':>10} {'FRAG':>6} "
         f"{'CACHE(MiB)':>11} {'BUF(MiB)':>9} {'KERNEL(MiB)':>12}"
@@ -97,11 +98,14 @@ def main():
 
         mem = r.info("memory")
         cpu = r.info("cpu")
+        stats = r.info("stats")
 
         used = mib(mem.get("used_memory"))
         rss = mib(mem.get("used_memory_rss"))
         peak = mib(mem.get("used_memory_peak"))
         frag = mem.get("mem_fragmentation_ratio", float("nan"))
+
+        ops = stats.get("instantaneous_ops_per_sec", 0)
 
         user = cpu.get("used_cpu_user")
         sysc = cpu.get("used_cpu_sys")
@@ -119,6 +123,7 @@ def main():
 
         print(
             f"{ts} "
+            f"{ops:7d} "
             f"{cpu_u:8.3f} {cpu_s:8.3f} "
             f"{used:9.1f} {rss:9.1f} {peak:10.1f} {frag:6.2f} "
             f"{cache:11.1f} {buffers:9.1f} {kernel:12.1f}",

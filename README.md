@@ -7,6 +7,7 @@ A command-line tool that continuously prints Valkey CPU and memory statistics al
 | Column | Description |
 |---|---|
 | `TIME` | Timestamp of the sample |
+| `OPS/s` | Instantaneous operations per second |
 | `CPU_U/s` | User CPU seconds consumed per second |
 | `CPU_S/s` | System CPU seconds consumed per second |
 | `USED(MiB)` | Valkey `used_memory` |
@@ -50,9 +51,9 @@ python valkey-monitor.py [OPTIONS]
 
 ```
 $ python valkey-monitor.py --host 10.0.0.5 --interval 2
-TIME                  CPU_U/s  CPU_S/s USED(MiB)  RSS(MiB)  PEAK(MiB)   FRAG  CACHE(MiB) BUF(MiB)  KERNEL(MiB)
-2025-06-15 12:00:00      nan      nan      52.3      58.1       58.1   1.11      1024.3     128.5        312.7
-2025-06-15 12:00:02    0.032    0.015      52.3      58.1       58.1   1.11      1024.3     128.5        312.8
+TIME                  OPS/s  CPU_U/s  CPU_S/s USED(MiB)  RSS(MiB)  PEAK(MiB)   FRAG  CACHE(MiB) BUF(MiB)  KERNEL(MiB)
+2025-06-15 12:00:00       0      nan      nan      52.3      58.1       58.1   1.11      1024.3     128.5        312.7
+2025-06-15 12:00:02     142    0.032    0.015      52.3      58.1       58.1   1.11      1024.3     128.5        312.8
 ```
 
 The first row always shows `nan` for CPU columns because per-second rates require two samples.
