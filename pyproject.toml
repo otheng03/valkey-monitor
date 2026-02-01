@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "valkey-monitor"
+version = "0.2.0"
+description = "Valkey/Redis metrics monitor with terminal and web frontends"
+requires-python = ">=3.10"
+dependencies = [
+    "redis>=5.0.0",
+]
+
+[project.optional-dependencies]
+web = [
+    "flask>=3.0",
+]
+
+[project.scripts]
+valkey-monitor = "valkey_monitor.terminal:main"
+valkey-monitor-web = "valkey_monitor.server:main"
+
+[tool.setuptools.packages.find]
+include = ["valkey_monitor*"]
+
+[tool.setuptools.package-data]
+"valkey_monitor.web" = ["templates/*.html", "static/*.js", "static/*.css"]

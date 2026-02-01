@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valkey Monitor</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Valkey Monitor</h1>
+    <span id="status" class="status disconnected">disconnected</span>
+  </header>
+
+  <div class="grid">
+    <div class="card"><canvas id="chart-ops"></canvas></div>
+    <div class="card"><canvas id="chart-cpu"></canvas></div>
+    <div class="card"><canvas id="chart-mem"></canvas></div>
+    <div class="card"><canvas id="chart-frag"></canvas></div>
+    <div class="card full-width"><canvas id="chart-sys"></canvas></div>
+  </div>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+  <script>
+    Dashboard.init({{ interval }});
+  </script>
+</body>
+</html>
